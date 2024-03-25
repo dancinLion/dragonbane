@@ -5,7 +5,12 @@
       <div class="row justify-between items-center">
         <div class="col text-bold">{{ weapon.name }}</div>
         <div class="col text-right">
-          <q-icon name="mdi-skull" size="sm" v-if="weapon.skill && app.banes('wepSkills', weapon.skill!)" />
+          <q-icon
+            name="mdi-skull"
+            size="sm"
+            v-if="weapon.skill && app.banes('wepSkills', weapon.skill!)"
+            color="negative"
+          />
         </div>
         <q-btn v-if="weapon.skill" icon="mdi-dice-d20" @click="showRoller" flat dense />
       </div>
@@ -36,7 +41,7 @@
     <div v-if="editWeapons">
       <div class="row q-gutter-sm items-center">
         <q-input class="col-grow" label="Weapon/Shield" v-model="weapon.name" dense />
-        <q-select class="col-shrink" label="Skill" v-model="weapon.skill" :options="skills" dense />
+        <q-select class="col-3" label="Skill" v-model="weapon.skill" :options="skills" dense />
         <q-btn class="col-shrink bg-primary" icon="delete" @click="$emit('delete')" flat dense />
       </div>
       <div class="row q-gutter-sm">

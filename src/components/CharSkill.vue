@@ -1,5 +1,5 @@
 <template>
-  <div :class="`row items-center justify-between q-ma-none q-px-xs ${baned ? 'bg-negative' : ''}`">
+  <div class="row items-center justify-between q-ma-none q-px-xs">
     <q-checkbox
       v-if="editSkills"
       class="q-ml-xs"
@@ -41,7 +41,7 @@
     <div class="col-grow q-pl-sm">{{ label }}</div>
 
     <div class="col-shrink" v-if="baned">
-      <q-icon v-for="(b, i) in banes" :key="i" name="mdi-skull" size="sm" />
+      <q-icon v-for="(b, i) in banes" :key="i" name="mdi-skull" size="sm" color="negative" />
     </div>
     <div class="col-1 text-center">{{ skill.attr }}</div>
 

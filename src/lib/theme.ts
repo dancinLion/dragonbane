@@ -41,7 +41,7 @@ export const setupTheme = async () => {
     colours.value = theme;
   };
 
-  setTheme(await OBR.theme.getTheme());
+  // setTheme(await OBR.theme.getTheme());
 
-  OBR.theme.onChange(setTheme);
+  // OBR.theme.onChange(setTheme);
 };

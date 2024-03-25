@@ -1,7 +1,7 @@
 <template>
   <!-- file deepcode ignore PureFunctionReturnValueIgnored: The return value is passed to a component -->
   <q-page class="column" :padding="$q.screen.gt.sm">
-    <q-expansion-item
+    <!-- <q-expansion-item
       :default-opened="!app.char.kin"
       :label="`${app.char.name} ${app.char.kin ? 'the' : ''} ${app.char.kin} ${app.char.profession}`"
       header-class="text-h5"
@@ -26,16 +26,7 @@
       </div>
 
       <q-input class="row q-px-sm" label="Appearance" v-model="app.char.appearance" dense autogrow />
-    </q-expansion-item>
-
-    <div class="row justify-between q-px-sm">
-      <div class="col-xs-6 col-sm-6 col-md-4 q-pr-xs">
-        <points-block v-model="app.char.hp" label="HP" />
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-4 q-pl-xs">
-        <points-block v-model="app.char.wp" label="WP" />
-      </div>
-    </div>
+    </q-expansion-item> -->
 
     <div class="row justify-evenly">
       <q-btn v-if="statsRolled" class="col-12 q-mb-sm" icon="mdi-dice-d20" flat @click="rollStats" label="Roll stats">
@@ -66,6 +57,13 @@
       </div>
     </div>
 
+    <div class="row q-pl-xs q-pr-sm q-mt-sm">
+      <points-block v-model="app.char.hp" label="HP" />
+    </div>
+    <div class="row q-pl-xs q-pr-sm">
+      <points-block v-model="app.char.wp" label="WP" />
+    </div>
+
     <q-tabs v-model="tab" align="justify" dense>
       <q-tab name="skills" label="Skills" />
       <q-tab name="combat" label="Combat" />
@@ -75,7 +73,7 @@
       <q-tab name="log" label="Log" /> -->
     </q-tabs>
 
-    <q-tab-panels v-model="tab" class="rounded-borders" swipeable>
+    <q-tab-panels v-model="tab" swipeable>
       <!--SKILLS-->
       <q-tab-panel name="skills" class="q-pa-none">
         <skills-tab />

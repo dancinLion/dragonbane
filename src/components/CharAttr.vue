@@ -1,14 +1,21 @@
 <template>
-  <div
-    :class="`column items-center justify-center q-ma-xs q-pa-xs ${
-      attr.condition.check ? 'bg-negative' : ''
-    } rounded-borders`"
-  >
-    <q-btn @click="showRoller = true" flat rounded dense size="md">
+  <div class="column items-center justify-center q-ma-xs q-pa-xs">
+    <!-- <q-btn @click="showRoller = true" flat rounded dense size="md"> -->
+    <div class="text-bold">
       {{ label }}
-      <q-icon name="mdi-dice-d20" />
+    </div>
+    <!-- </q-btn> -->
+
+    <q-btn
+      :class="`col-shrink text-bold q-pa-none ${attr.condition.check ? 'text-negative' : ''}`"
+      size="xl"
+      @click="showRoller = true"
+      flat
+      rounded
+    >
+      <div class="text-bold text-h5">{{ attr.score }}</div>
+      <q-icon name="mdi-dice-d20" size="sm"></q-icon>
     </q-btn>
-    <q-btn :label="`${attr.score}`" class="col-shrink text-bold q-pa-none" size="xl" @click="editAttr" flat rounded />
     <q-checkbox
       :label="attr.condition.name"
       v-model="attr.condition.check"

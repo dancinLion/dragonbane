@@ -1,10 +1,9 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header>
-      <q-toolbar :style="`color: ${colours.text.primary};`">
+      <q-toolbar class="bg-dark">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-
-        <q-toolbar-title>Dragonbane</q-toolbar-title>
+        <q-toolbar-title>{{ app.char.name }}</q-toolbar-title>
         <q-btn icon="mdi-arrow-up-bold-hexagon-outline" @click="advance" flat>
           <q-tooltip>Roll Advancements</q-tooltip>
         </q-btn>
@@ -35,14 +34,17 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered>
+    <q-drawer v-model="leftDrawerOpen" class="bg-dark">
+      <q-banner class="text-h2">
+        <div class="text-h5 text-negative text-bold">Dragonbane Sheet</div>
+      </q-banner>
       <q-list>
         <q-item
-          class="items-center"
+          class="items-center text-h6"
           v-for="(c, i) in app.chars"
           :key="`char-${i}`"
           :active="app.conf.char == i"
-          active-class="text-accent"
+          active-class="text-primary"
           clickable
           v-ripple
         >
@@ -53,7 +55,6 @@
         </q-item>
         <q-btn class="full-width" label="New Character" flat @click="app.chars.push(NewCharacter())" icon-right="add" />
         <q-separator />
-
         <q-item clickable v-ripple @click="app.exportData">
           <q-item-section avatar>
             <q-icon name="download" />
