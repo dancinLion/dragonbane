@@ -65,8 +65,6 @@
     </div>
   </div>
 
-  <action-item-row></action-item-row>
-
   <q-dialog v-model="display.roller" maximized>
     <dice-roller
       :name="weapon.name"
@@ -212,11 +210,10 @@ import { notifySend } from 'src/lib/notify';
 
 import DiceRoller from './DiceRoller.vue';
 import DiceSelect from './DiceSelect.vue';
-import ActionItemRow from './ActionItemRow.vue';
 
 export default defineComponent({
   name: 'WeaponBlock',
-  components: { DiceRoller, DiceSelect, ActionItemRow },
+  components: { DiceRoller, DiceSelect },
   props: {
     editWeapons: Boolean,
     modelValue: {

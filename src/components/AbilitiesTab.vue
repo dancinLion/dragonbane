@@ -1,17 +1,22 @@
 <template>
-  <div class="row justify-between" v-if="app.conf.showSpells">
-    <div class="col-xs-12 col-sm-12 col-lg-6 q-px-xs">
-      <div class="row q-mt-md q-mb-sm text-h6 text-bold items-center">
-        Heroic Abilities
-        <q-btn icon="add_circle" flat dense rounded @click="addAbl" />
-      </div>
-      <ability-block
-        v-for="(ab, i) in app.char.abilities"
-        :key="`abl-${i}`"
-        v-model="app.char.abilities[i]"
-        @delete="removeAbl(i)"
-      />
+  <div class="row q-ml-sm items-center">
+    <div class="col text-h6 text-bold">Heroic Abilities</div>
+    <div class="q-px-none">
+      <q-toggle v-model="editAbilities" icon="mdi-pencil" />
     </div>
+  </div>
+
+  <!-- <q-btn icon="add_circle" flat dense rounded @click="addAbl" /> -->
+
+  <div v-if="app.conf.showSpells">
+    <ability-block
+      v-for="(ab, i) in app.char.abilities"
+      :key="`abl-${i}`"
+      v-model="app.char.abilities[i]"
+      :edit-abilities="editAbilities"
+      @delete="removeAbl(i)"
+    />
+    <q-btn v-if="editAbilities" icon="add_circle" label="Add Ability" flat dense rounded @click="addAbl" />
 
     <div class="col-xs-12 col-sm-12 col-lg-6 q-px-xs">
       <div class="row q-mt-md q-mb-sm text-h6 text-bold items-center justify-between">
@@ -20,15 +25,10 @@
           <q-btn icon="add_circle" flat dense rounded @click="addSpell" />
         </div>
 
-        <q-input class="col-grow q-px-sm" label="Search" v-model="filter" clearable dense>
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-
         <q-checkbox
           class="col-shrink"
           v-model="showPreparedSpells"
+          :edit-abilities="editAbilities"
           checked-icon="mdi-eye"
           unchecked-icon="mdi-eye-off"
           color="white"
@@ -95,6 +95,7 @@ export default defineComponent({
     const app = useCharacterStore();
 
     const $q = useQuasar();
+    const editAbilities = ref(false);
     const addSpell = () => app.char.spells.push(NewSpell());
     const removeSpell = (index: number) =>
       $q
@@ -152,7 +153,7 @@ export default defineComponent({
       BaseChance,
       filter,
       show,
-
+      editAbilities,
       addSpell,
       removeSpell,
       sortSpells,
