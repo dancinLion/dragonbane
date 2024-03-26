@@ -1,96 +1,132 @@
 <template>
   <!-- file deepcode ignore PureFunctionReturnValueIgnored: The return value is passed to a component -->
-  <action-item-row>
-    <template v-slot:prepend>
+
+  <q-expansion-item
+    hide-expand-icon
+    v-if="!editSpells"
+    class="items-center q-ma-none"
+    dense
+    :label="`${spell.name} [${spell.rank > 0 ? 'Rank ' + spell.rank : 'Magic Trick'}${
+      spell.prepared ? ', Prepared' : ''
+    }]`"
+  >
+    <template v-slot:header>
+      <q-item-section class="col-grow text-bold">
+        {{ spell.name }}
+      </q-item-section>
+
+      <q-item-section class="col-shrink">
+        <q-icon
+          name="mdi-skull"
+          color="negative"
+          size="sm"
+          v-if="spell.skill && app.banes('secSkills', spell.skill!)"
+        />
+      </q-item-section>
+
       <q-btn
-        v-if="spell.skill && spell.rank > 0 && spell.prepared"
-        icon="mdi-dice-d20"
-        @click="showRoller()"
+        v-if="spell.rank > 0 && spell.skill && spell.prepared"
+        icon="mdi-bookmark-minus"
+        @click="spell.prepared = false"
         flat
         dense
       />
-      <q-btn v-else-if="spell.rank == 0" icon="mdi-account-arrow-right" @click="useMagicTrick(spell.name)" flat dense />
-      <q-btn v-else-if="spell.skill" icon="mdi-book-open-variant" @click="showRoller()" flat dense />
-    </template>
 
-    <template v-slot:content>
-      <q-expansion-item
-        :label="`${spell.name} [${spell.rank > 0 ? 'Rank ' + spell.rank : 'Magic Trick'}${
-          spell.prepared ? ', Prepared' : ''
-        }]`"
-        :caption="spell.text"
-        header-class="text-bold q-pl-xs rounded-borders"
-        :default-opened="!spell.name"
-      >
-        <div class="column q-mt-sm rounded-borders">
-          <div class="row items-center">
-            <q-checkbox
-              v-if="spell.rank > 0"
-              class="col-shrink q-pr-xs"
-              checked-icon="mdi-alpha-p-box"
-              unchecked-icon="mdi-alpha-p-box-outline"
-              color="white"
-              v-model="spell.prepared"
-              size="lg"
-              dense
-            >
-              <q-tooltip>Prepared</q-tooltip>
-            </q-checkbox>
-            <q-input class="col-grow" label="Name" v-model="spell.name" dense />
-            <q-input class="col-xs-2 col-sm-1" label="Rank" v-model.number="spell.rank" type="number" dense />
-          </div>
-
-          <q-select
-            class="row"
-            options-selected-class="text-purple-2"
-            label="Skill"
-            :options="skills"
-            v-model="spell.skill"
-            dense
-          />
-
-          <div v-if="spell.rank > 0" class="row">
-            <q-input class="col" label="Casting Time" v-model="spell.time" dense />
-            <q-select
-              class="col"
-              options-selected-class="text-purple-2"
-              label="Duration"
-              v-model="spell.duration"
-              :options="Object.values(EDuration)"
-              dense
-            />
-          </div>
-
-          <div v-if="spell.rank > 0" class="row items-end">
-            <q-select
-              class="col"
-              options-selected-class="text-purple-2"
-              label="Requirements"
-              v-model="spell.req"
-              multiple
-              :options="Object.values(ESpellReq)"
-              dense
-            />
-            <q-input class="col" label="Range" v-model="spell.range" dense />
-          </div>
-
-          <q-input
-            class="row"
-            v-if="spell.req.includes(ESpellReq.Ingredient)"
-            label="Ingredient"
-            v-model="spell.ingredient"
-            dense
-          />
-
-          <q-input class="row" label="Text" v-model="spell.text" dense autogrow />
+      <q-item-section v-if="spell.rank == 0 || spell.prepared" class="col-1 text-bold">
+        <div :class="`${app.char.wp.current < (spell.rank > 0 ? 2 : 1) ? 'text-negative' : ''}`">
+          {{ spell.rank > 0 ? 2 : 1 }}&nbsp;WP
         </div>
-      </q-expansion-item>
+      </q-item-section>
+
+      <q-item-section class="col-1">
+        <q-btn
+          v-if="spell.rank == 0"
+          icon="mdi-arrow-right-bold-circle"
+          @click="useMagicTrick(spell.name)"
+          flat
+          dense
+        />
+        <q-btn v-else-if="spell.skill && spell.prepared" icon="mdi-dice-d20" @click="showRoller()" flat dense />
+        <q-btn v-else icon="mdi-bookmark-plus" @click="spell.prepared = true" flat dense />
+      </q-item-section>
     </template>
 
-    <template v-slot:append>
-      <q-btn icon="delete" flat dense @click="$emit('delete')" />
+    <template v-slot:default>
+      <div class="row q-mx-md">
+        <div class="col">
+          <q-icon name="mdi-timer-sand-full" />
+          {{ spell.time }}
+        </div>
+        <div class="col">{{ spell.req.join(', ') }}</div>
+      </div>
+      <div class="row q-mx-md">
+        <div class="col">
+          <q-icon name="mdi-timelapse" />
+          {{ spell.duration }}
+        </div>
+        <div class="col" v-if="spell.range != ''">
+          <q-icon name="mdi-ray-start-arrow" />
+          {{ spell.range }}m
+        </div>
+      </div>
+      <div class="q-mx-md">
+        {{ spell.text }}
+      </div>
     </template>
-  </action-item-row>
+  </q-expansion-item>
+
+  <div v-if="editSpells" class="column q-mx-md q-mb-lg">
+    <div class="row q-gutter-sm">
+      <q-input class="col-grow" label="Name" v-model="spell.name" dense />
+      <q-input class="col-1" label="Rank" v-model.number="spell.rank" type="number" dense />
+      <q-btn class="bg-negative" icon="delete" flat dense @click="$emit('delete')" />
+    </div>
+
+    <q-select
+      class="row"
+      options-selected-class="text-purple-2"
+      label="Skill"
+      :options="skills"
+      v-model="spell.skill"
+      dense
+    />
+
+    <div class="row q-gutter-sm">
+      <q-input class="col" label="Casting Time" v-model="spell.time" dense />
+      <q-select
+        class="col"
+        options-selected-class="text-purple-2"
+        label="Duration"
+        v-model="spell.duration"
+        :options="Object.values(EDuration)"
+        dense
+      />
+    </div>
+
+    <div class="row q-gutter-sm">
+      <q-select
+        v-if="spell.rank > 0"
+        class="col"
+        options-selected-class="text-purple-2"
+        label="Requirements"
+        v-model="spell.req"
+        multiple
+        :options="Object.values(ESpellReq)"
+        dense
+      />
+      <q-input class="col" label="Range" v-model="spell.range" dense />
+    </div>
+
+    <q-input
+      class="row"
+      v-if="spell.req.includes(ESpellReq.Ingredient)"
+      label="Ingredient"
+      v-model="spell.ingredient"
+      dense
+    />
+
+    <q-input class="row" label="Text" v-model="spell.text" dense autogrow />
+  </div>
 
   <q-dialog v-model="display.roller" maximized>
     <dice-roller
@@ -199,12 +235,12 @@ import { notifySend } from 'src/lib/notify';
 
 import DiceRoller from './DiceRoller.vue';
 import DiceSelect from './DiceSelect.vue';
-import ActionItemRow from './ActionItemRow.vue';
 
 export default defineComponent({
   name: 'SpellBlock',
-  components: { DiceRoller, DiceSelect, ActionItemRow },
+  components: { DiceRoller, DiceSelect },
   props: {
+    editSpells: Boolean,
     modelValue: {
       type: Object as PropType<ISpell>,
       required: true,

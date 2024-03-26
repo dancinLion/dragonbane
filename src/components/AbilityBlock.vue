@@ -1,28 +1,30 @@
 <template>
-  <div>
-    <q-expansion-item hide-expand-icon v-if="!editAbilities" class="items-center q-ma-none">
-      <template v-slot:header>
-        <q-item-section class="col-10 q-ml-none text-bold">
-          {{ abl.name }}
-        </q-item-section>
-        <q-item-section class="text-bold">{{ abl.wp }}&nbsp;WP</q-item-section>
-        <q-item-section>
-          <q-btn icon="mdi-arrow-right-bold-circle" class="q-pl-sm" flat dense @click="activate" />
-        </q-item-section>
-      </template>
-      <template v-slot:default>
-        <div class="q-mx-md">
-          {{ abl.text }}
-        </div>
-      </template>
-    </q-expansion-item>
-  </div>
-
-  <div class="column q-mx-md q-mb-md" v-if="editAbilities">
-    <div class="row">
+  <q-expansion-item hide-expand-icon v-if="!editAbilities" class="items-center q-ma-none" dense>
+    <template v-slot:header>
+      <q-item-section class="col-grow q-ml-none text-bold">
+        {{ abl.name }}
+      </q-item-section>
+      <q-item-section
+        v-if="abl.wp > 0"
+        :class="`col-1 text-bold ${app.char.wp.current < abl.wp ? 'text-negative' : ''}`"
+      >
+        {{ abl.wp }}&nbsp;WP
+      </q-item-section>
+      <q-item-section v-if="abl.wp > 0" class="col-1">
+        <q-btn icon="mdi-arrow-right-bold-circle" flat dense @click="activate" />
+      </q-item-section>
+    </template>
+    <template v-slot:default>
+      <div class="q-mx-md">
+        {{ abl.text }}
+      </div>
+    </template>
+  </q-expansion-item>
+  <div v-if="editAbilities" class="column q-mx-md q-mb-md">
+    <div class="row q-gutter-sm">
       <q-input class="col" label="Name" v-model="abl.name" dense />
-      <q-input class="col-xs-2 col-sm-1" label="WP" v-model.number="abl.wp" type="number" dense />
-      <q-btn icon="delete" flat dense @click="$emit('delete')" />
+      <q-input class="col-1" label="WP" v-model.number="abl.wp" type="number" dense />
+      <q-btn class="bg-negative" icon="delete" flat dense @click="$emit('delete')" />
     </div>
     <q-input class="row" label="Text" v-model="abl.text" dense autogrow />
   </div>
@@ -80,6 +82,7 @@ export default defineComponent({
         });
 
     return {
+      app,
       abl,
       activate,
     };
