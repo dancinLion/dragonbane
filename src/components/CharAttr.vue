@@ -1,23 +1,53 @@
 <template>
-  <div class="column items-center justify-center q-ma-xs q-pa-xs">
+  <div class="column items-center justify-center q-mt-xs">
     <!-- <q-btn @click="showRoller = true" flat rounded dense size="md"> -->
-    <div class="text-bold">
-      {{ label }}
-    </div>
+    <!-- <div class="text-bold">
+        {{ label }}
+        <q-icon name="mdi-dice-d20" size="sm"></q-icon>
+      </div> -->
     <!-- </q-btn> -->
 
-    <q-btn
-      :class="`col-shrink text-bold q-pa-none ${attr.condition.check ? 'text-negative' : ''}`"
-      size="xl"
-      @click="showRoller = true"
-      flat
-      rounded
-    >
-      <div class="text-bold text-h5">{{ attr.score }}</div>
-      <q-icon name="mdi-dice-d20" size="sm"></q-icon>
+    <!-- <q-btn
+        :class="`col-shrink text-bold q-pa-none ${attr.condition.check ? 'text-negative' : ''}`"
+        size="xl"
+        @click="showRoller = true"
+        flat
+        rounded
+        > -->
+
+    <!-- <div :class="`row text-bold text-h5 ${attr.condition.check ? 'text-negative' : ''}`"> -->
+
+    <q-btn @click="showRoller = true" flat dense size="xs" class="q-px-sm">
+      <div class="row items-center text-bold text-h5">
+        <div class="text-overline q-mr-xs">{{ label }}</div>
+        <div class="q-mr-xs">{{ attr.score }}</div>
+        <q-icon name="mdi-dice-d20" size="sm" />
+        <!-- <q-tooltip>Roll {{ label }} Check</q-tooltip> -->
+      </div>
     </q-btn>
-    <q-checkbox
-      :label="attr.condition.name"
+
+    <div class="text-bold"></div>
+
+    <q-chip
+      v-if="attr.condition.check"
+      color="negative"
+      class="q-pr-sm"
+      dense
+      clickable
+      @click="attr.condition.check = false"
+    >
+      <q-icon name="mdi-skull" class="q-mr-xs" />
+      {{ attr.condition.name }}
+      <q-tooltip>Remove Condition</q-tooltip>
+    </q-chip>
+
+    <q-chip v-if="!attr.condition.check" color="transparent" dense clickable @click="attr.condition.check = true">
+      <q-icon name="mdi-skull" color="dark" />
+      <q-tooltip>Add Condition</q-tooltip>
+    </q-chip>
+
+    <!-- <q-checkbox
+      v-if="!attr.condition.check"
       v-model="attr.condition.check"
       size="sm"
       left-label
@@ -25,8 +55,9 @@
       unchecked-icon="mdi-emoticon-happy"
       checked-icon="mdi-skull"
       color="white"
-    />
+    /> -->
   </div>
+
   <q-dialog v-model="showRoller" maximized>
     <dice-roller
       :name="label"

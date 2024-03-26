@@ -39,43 +39,44 @@
       </div>
     </div>
 
-  <q-dialog v-model="showAddSkill">
-    <q-card>
-      <q-card-section class="column">
-        <q-input label="Skill Name" v-model="newSkillName" dense />
-        <q-select
-          options-selected-class="text-purple-2"
-          label="Attribute"
-          :options="Object.values(EAttr)"
-          v-model="newSkillAttr"
-          dense
-        />
-      </q-card-section>
-      <q-card-actions class="row justify-evenly">
-        <q-btn
-          class="col"
-          color="red"
-          label="Cancel"
-          @click="
-            newSkillName = '';
-            showAddSkill = false;
-          "
-          flat
-        />
-        <q-btn
-          class="col"
-          color="green"
-          label="Add"
-          @click="
-            app.char.secSkills[newSkillName] = skill(newSkillAttr);
-            newSkillName = '';
-            showAddSkill = false;
-          "
-          flat
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+    <q-dialog v-model="showAddSkill">
+      <q-card>
+        <q-card-section class="column">
+          <q-input label="Skill Name" v-model="newSkillName" dense />
+          <q-select
+            options-selected-class="text-purple-2"
+            label="Attribute"
+            :options="Object.values(EAttr)"
+            v-model="newSkillAttr"
+            dense
+          />
+        </q-card-section>
+        <q-card-actions class="row justify-evenly">
+          <q-btn
+            class="col"
+            color="red"
+            label="Cancel"
+            @click="
+              newSkillName = '';
+              showAddSkill = false;
+            "
+            flat
+          />
+          <q-btn
+            class="col"
+            color="green"
+            label="Add"
+            @click="
+              app.char.secSkills[newSkillName] = skill(newSkillAttr);
+              newSkillName = '';
+              showAddSkill = false;
+            "
+            flat
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script lang="ts">

@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="row q-pl-xs q-pr-sm q-mt-sm">
+    <div class="row q-pl-xs q-pr-sm q-mt-xs">
       <points-block v-model="app.char.hp" label="HP" />
     </div>
     <div class="row q-pl-xs q-pr-sm">

@@ -9,7 +9,10 @@
     <div class="row text-h6 text-bold q-mx-sm q-mt-sm items-center">
       <div class="col">
         <div class="row items-center">
-          <div>Inventory ({{ encumberance }} / {{ encumberMax }})</div>
+          <div>Inventory</div>
+          <div :class="`q-ml-sm ${encumberance > encumberMax ? 'text-negative' : ''}`">
+            {{ encumberance }} / {{ encumberMax }}
+          </div>
           <q-btn icon="add_circle" flat dense rounded @click="addInvItem">
             <q-tooltip>Add item</q-tooltip>
           </q-btn>
