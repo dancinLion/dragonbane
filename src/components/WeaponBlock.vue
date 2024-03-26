@@ -41,8 +41,22 @@
     <div v-if="editWeapons">
       <div class="row q-gutter-sm items-center">
         <q-input class="col-grow" label="Weapon/Shield" v-model="weapon.name" dense />
-        <q-select class="col-3" label="Skill" v-model="weapon.skill" :options="skills" dense />
-        <q-btn class="col-shrink bg-primary" icon="delete" @click="$emit('delete')" flat dense />
+        <q-select
+          class="col-shrink"
+          options-selected-class="text-purple-2"
+          label="Skill"
+          v-model="weapon.skill"
+          :options="skills"
+          dense
+        />
+        <q-btn
+          class="col-shrink bg-primary"
+          options-selected-class="text-purple-2"
+          icon="delete"
+          @click="$emit('delete')"
+          flat
+          dense
+        />
       </div>
       <div class="row q-gutter-sm">
         <q-select class="col" label="Grip" v-model="weapon.grip" :options="Object.values(EGrip)" dense />
@@ -56,8 +70,6 @@
     </div>
   </div>
 
-  <action-item-row></action-item-row>
-
   <q-dialog v-model="display.roller" maximized>
     <dice-roller
       :name="weapon.name"
@@ -67,11 +79,11 @@
       :skill="weapon.skill"
       @close="display.roller = false"
       @result="
-        (r) => {
+        (r: string) => {
           setResultDisplay(r);
-          send(
+          notifySend(
             `${app.char.name} rolled ${weapon.skill}: ${r}`,
-            r == ED20Result.Dragon || r == ED20Result.Success ? 'SUCCESS' : 'ERROR'
+            r.includes(ED20Result.Dragon) || r.includes(ED20Result.Success) ? 'SUCCESS' : 'ERROR'
           );
         }
       "
@@ -199,15 +211,14 @@ import { useCharacterStore } from 'src/stores/character';
 
 import { parseDiceString, rollDice } from 'src/lib/util';
 import { MeleeDemon, RangedDemon, rollTable } from 'src/lib/tables';
-import { send } from 'src/lib/notify';
+import { notifySend } from 'src/lib/notify';
 
 import DiceRoller from './DiceRoller.vue';
 import DiceSelect from './DiceSelect.vue';
-import ActionItemRow from './ActionItemRow.vue';
 
 export default defineComponent({
   name: 'WeaponBlock',
-  components: { DiceRoller, DiceSelect, ActionItemRow },
+  components: { DiceRoller, DiceSelect },
   props: {
     editWeapons: Boolean,
     modelValue: {
@@ -263,18 +274,13 @@ export default defineComponent({
         demon: false,
       };
 
-      switch (r) {
-        case ED20Result.Dragon:
-          display.value.dragon = true;
-          break;
-        case ED20Result.Demon:
-          display.value.demon = true;
-          break;
-        case ED20Result.Success:
-          display.value.success = true;
-        default:
-          break;
-      }
+      r.includes(ED20Result.Dragon)
+        ? (display.value.dragon = true)
+        : r.includes(ED20Result.Demon)
+        ? (display.value.demon = true)
+        : r.includes(ED20Result.Success)
+        ? (display.value.success = true)
+        : null;
     };
 
     const mishap = ref({
@@ -289,12 +295,12 @@ export default defineComponent({
 
     const rollDmg = () => {
       dmgRes.value = rollDice(dmgDice.value);
-      send(`${app.char.name} hit for ${dmgRes.value.total} damage!`, 'SUCCESS');
+      notifySend(`${app.char.name} hit for ${dmgRes.value.total} damage!`, 'SUCCESS');
     };
 
     return {
       app,
-      send,
+      notifySend,
       weapon,
       skills,
       EGrip,

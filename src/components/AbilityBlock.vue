@@ -1,32 +1,31 @@
 <template>
-  <action-item-row>
-    <template v-slot:prepend>
-      <q-btn icon="mdi-account-arrow-right" flat dense @click="activate" />
-    </template>
-
-    <template v-slot:content>
-      <q-expansion-item
-        :label="`${abl.name} [WP: ${abl.wp}]`"
-        :caption="abl.text"
-        :caption-lines="0.5"
-        header-class="text-bold q-pl-xs rounded-borders"
-        :default-opened="!abl.name"
-      >
-        <div class="column q-my-sm">
-          <div class="row">
-            <q-input class="col" label="Name" v-model="abl.name" dense />
-            <q-input class="col-xs-2 col-sm-1" label="WP" v-model.number="abl.wp" type="number" dense />
-          </div>
-
-          <q-input class="row" label="Text" v-model="abl.text" dense autogrow />
+  <div>
+    <q-expansion-item hide-expand-icon v-if="!editAbilities" class="items-center q-ma-none">
+      <template v-slot:header>
+        <q-item-section class="col-10 q-ml-none text-bold">
+          {{ abl.name }}
+        </q-item-section>
+        <q-item-section class="text-bold">{{ abl.wp }}&nbsp;WP</q-item-section>
+        <q-item-section>
+          <q-btn icon="mdi-arrow-right-bold-circle" class="q-pl-sm" flat dense @click="activate" />
+        </q-item-section>
+      </template>
+      <template v-slot:default>
+        <div class="q-mx-md">
+          {{ abl.text }}
         </div>
-      </q-expansion-item>
-    </template>
+      </template>
+    </q-expansion-item>
+  </div>
 
-    <template v-slot:append>
+  <div class="column q-mx-md q-mb-md" v-if="editAbilities">
+    <div class="row">
+      <q-input class="col" label="Name" v-model="abl.name" dense />
+      <q-input class="col-xs-2 col-sm-1" label="WP" v-model.number="abl.wp" type="number" dense />
       <q-btn icon="delete" flat dense @click="$emit('delete')" />
-    </template>
-  </action-item-row>
+    </div>
+    <q-input class="row" label="Text" v-model="abl.text" dense autogrow />
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,12 +36,10 @@ import { IAbility } from './models';
 import { useCharacterStore } from 'src/stores/character';
 import { useQuasar } from 'quasar';
 
-import ActionItemRow from './ActionItemRow.vue';
-
 export default defineComponent({
   name: 'AbilityBlock',
-  components: { ActionItemRow },
   props: {
+    editAbilities: Boolean,
     modelValue: {
       type: Object as PropType<IAbility>,
       required: true,
