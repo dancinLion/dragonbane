@@ -3,30 +3,35 @@
     <q-header>
       <q-toolbar class="bg-dark">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
-        <q-toolbar-title>{{ app.char.name }}</q-toolbar-title>
-        <q-btn icon="mdi-arrow-up-bold-hexagon-outline" @click="advance" flat>
-          <q-tooltip>Roll Advancements</q-tooltip>
-        </q-btn>
-        <q-btn-dropdown icon="mdi-campfire" flat>
+        <q-toolbar-title class="text-bold q-pl-xs">{{ app.char.name }}</q-toolbar-title>
+
+        <q-btn-dropdown class="q-pa-none" icon="mdi-campfire" flat>
           <q-list>
-            <q-item clickable v-ripple @click="rest.round()">
+            <q-item clickable v-close-popup v-ripple @click="rest.round()">
               <q-item-section>
-                <q-item-label>ROUND</q-item-label>
-                <q-item-label caption>D6 WP</q-item-label>
+                <q-item-label>Round</q-item-label>
+                <q-item-label caption>+D6 WP.</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple @click="rest.stretch()">
+            <q-item clickable v-close-popup v-ripple @click="rest.stretch()">
               <q-item-section>
-                <q-item-label>STRETCH</q-item-label>
-                <q-item-label caption>D6 HP, D6 WP. Clear one condition</q-item-label>
+                <q-item-label>Stretch</q-item-label>
+                <q-item-label caption>+D6 HP, +D6 WP. Clear 1 condition.</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple @click="rest.shift()">
+            <q-item clickable v-close-popup v-ripple @click="rest.shift()">
               <q-item-section>
-                <q-item-label>SHIFT</q-item-label>
-                <q-item-label caption>All HP, WP. Clear all conditions</q-item-label>
+                <q-item-label>Shift</q-item-label>
+                <q-item-label caption>Restore all HP, WP. Clear all conditions.</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-close-popup v-ripple @click="advance">
+              <q-item-section>
+                <q-item-label>End of Session</q-item-label>
+                <q-item-label caption>Roll Advancements.</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -44,13 +49,13 @@
           v-for="(c, i) in app.chars"
           :key="`char-${i}`"
           :active="app.conf.char == i"
-          active-class="text-primary"
+          active-class="bg-primary text-white"
           clickable
           v-ripple
         >
           <q-item-section @click="app.conf.char = i">{{ c.name }}</q-item-section>
           <q-item-section v-if="app.chars.length > 1" side>
-            <q-btn icon="delete" flat dense rounded @click="removeChar(i)" />
+            <q-btn color="negative" icon="delete" flat dense rounded @click="removeChar(i)" />
           </q-item-section>
         </q-item>
         <q-btn class="full-width" label="New Character" flat @click="app.chars.push(NewCharacter())" icon-right="add" />
@@ -80,12 +85,6 @@
         <q-item>
           <q-item-section>
             <q-toggle label="Show Spells" v-model="app.conf.showSpells" />
-          </q-item-section>
-        </q-item>
-
-        <q-item>
-          <q-item-section>
-            <q-toggle label="Show 'Trained'" v-model="app.conf.showTrainedSkills" />
           </q-item-section>
         </q-item>
 

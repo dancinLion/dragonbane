@@ -17,7 +17,7 @@
 
     <!-- <div :class="`row text-bold text-h5 ${attr.condition.check ? 'text-negative' : ''}`"> -->
 
-    <q-btn @click="showRoller = true" flat dense size="xs" class="q-px-sm">
+    <q-btn @click="showRoller = true" flat dense size="xs" class="q-py-none q-px-sm">
       <div class="row items-center text-bold text-h5">
         <div class="text-overline q-mr-xs">{{ label }}</div>
         <div class="q-mr-xs">{{ attr.score }}</div>
