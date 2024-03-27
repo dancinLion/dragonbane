@@ -2,7 +2,7 @@
   <!-- file deepcode ignore PureMethodReturnValueIgnored: The return value is passed as a property to a component -->
   <q-card>
     <q-card-section class="row text-center text-h5">
-      <div class="col-grow">{{ name }} ({{ target }})</div>
+      <div class="col-grow">{{ name }} - {{ target }}</div>
       <q-btn class="col-shrink" icon="close" flat rounded @click="$emit('close')" dense />
     </q-card-section>
 
@@ -102,9 +102,12 @@ export default defineComponent({
     const rollIt = () => {
       rolled.value = false;
       void (async () => {
-        for (let i = 0; i < 20; i++) {
-          d20Result.value.forEach((v, i) => (d20Result.value[i] = roll(20)));
-          await sleep(75 + i * 10);
+        const randomIterations = Math.floor(Math.random() * (14 - 7 + 1)) + 7;
+
+        for (let i = 0; i < randomIterations; i++) {
+          d20Result.value.forEach((v, index) => (d20Result.value[index] = roll(20)));
+          const delay = 75 + Math.min(7, i) * 5;
+          await sleep(delay);
         }
         rolled.value = true;
 
