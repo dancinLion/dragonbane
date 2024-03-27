@@ -22,10 +22,7 @@
 
     <div class="row q-mt-md">
       <div class="col-12 text-h6 text-bold">
-        <div class="col-shrink q-pl-sm">
-          Secondary Skills
-          <q-btn icon="add_circle" flat dense rounded @click="showAddSkill = true" />
-        </div>
+        <div class="col-shrink q-pl-sm">Secondary Skills</div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" v-for="(sk, k) in app.char.secSkills" :key="`secSkill-${k}`">
         <char-skill
@@ -37,6 +34,14 @@
           :skill-type="ERollType.Secondary"
         />
       </div>
+      <q-btn
+        v-if="editSkills"
+        class="q-ml-md q-mb-md"
+        icon="add_circle"
+        label="Add New Secondary Skill"
+        dense
+        @click="showAddSkill = true"
+      />
     </div>
 
     <q-dialog v-model="showAddSkill">

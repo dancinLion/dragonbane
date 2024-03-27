@@ -66,7 +66,7 @@
         </div>
         <div class="col" v-if="spell.range != ''">
           <q-icon name="mdi-ray-start-arrow" />
-          {{ spell.range }}m
+          {{ spell.range }}
         </div>
       </div>
       <div class="q-mx-md q-mb-lg">

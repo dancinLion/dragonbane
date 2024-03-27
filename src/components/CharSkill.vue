@@ -49,7 +49,15 @@
       <q-btn icon="mdi-dice-d20" @click="showRoller = true" flat round dense />
     </div>
 
-    <q-btn class="col-shrink" icon="delete" v-if="showDelete" @click="$emit('delete', label)" flat dense rounded />
+    <q-btn
+      class="col-shrink"
+      icon="delete"
+      v-if="editSkills && showDelete"
+      @click="$emit('delete', label)"
+      flat
+      dense
+      rounded
+    />
   </div>
   <q-dialog v-model="showRoller" maximized>
     <dice-roller
