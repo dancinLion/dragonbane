@@ -42,7 +42,7 @@
       <div class="row q-gutter-sm items-center">
         <q-input class="col-grow" label="Weapon/Shield" v-model="weapon.name" dense />
         <q-select
-          class="col-shrink"
+          class="col-3"
           options-selected-class="text-purple-2"
           label="Skill"
           v-model="weapon.skill"
@@ -50,7 +50,7 @@
           dense
         />
         <q-btn
-          class="col-shrink bg-primary"
+          class="col-shrink bg-negative"
           options-selected-class="text-purple-2"
           icon="delete"
           @click="$emit('delete')"
